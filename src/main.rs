@@ -101,7 +101,7 @@ fn main() {
             // encode message binary data into target image data
             let mut i = 0;
             for bit in message_bin.iter() {
-                if *bit && data[i] % 2 == 0{
+                if *bit && data[i] % 2 == 0 {
                     data[i] += 1;
                 } else if !*bit && data[i] % 2 != 0 {
                     data[i] -= 1;
