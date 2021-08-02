@@ -217,6 +217,5 @@ fn main() {
         let mut output_file = File::create(Path::new(&args[3])).unwrap();
         output_file.write_all(&message).unwrap();
 
-
     }
 }
