@@ -62,7 +62,6 @@ fn u8_vec_bin(x: Vec<bool>) -> Vec<u8> {
     let mut output: Vec<u8> = Vec::new();
     for byte in x.chunks(8) {
         if byte.len() == 8 {
-            // output.push(u8_bin(vec![byte[0], byte[1], byte[2], byte[3], byte[4], byte[5], byte[6], byte[7]]));
             output.push(u8_bin(byte.to_vec()));
         }
     }
