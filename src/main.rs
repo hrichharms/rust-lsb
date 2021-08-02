@@ -100,6 +100,17 @@ fn u8_vec_bin(x: Vec<bool>) -> Vec<u8> {
 }
 
 
+// reads the least significant bits of a given vector of unsigned
+// 8-bit integers and stores them in a vector of booleans
+fn vec_u8_lsb(x: Vec<u8>) -> Vec<bool> {
+    let mut output: Vec<bool> = Vec::new();
+    for byte in x.iter() {
+        output.push(byte % 2);
+    }
+    return output;
+}
+
+
 fn main() {
 
     // pull command line arguments into strings vector
