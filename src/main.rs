@@ -1,11 +1,12 @@
 use std::env::args;
-use png::Decoder;
-use png::Encoder;
 use std::fs::read;
 use std::fs::File;
 use std::path::Path;
 use std::io::BufWriter;
 use std::string::String;
+
+use png::Decoder;
+use png::Encoder;
 
 
 // converts an unsigned 8-bit integer into its binary form
