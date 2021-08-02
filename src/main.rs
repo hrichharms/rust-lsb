@@ -101,12 +101,20 @@ fn main() {
         // convert contents of message to boolean vector
         let message_bin = bin_vec_u8(message_contents);
 
+        // create 16-bit length header for hidden message
+        let header = bin_u16(message_bin.len() as u16);
+
+        // combine header and message_bin for encoding payload
+        let mut encoding_payload: Vec<bool> = Vec::new();
+        encoding_payload.extend(header.iter());
+        encoding_payload.extend(message_bin.iter());
+
         // pull info and reader objects from new decoder object for image
         let decoder = Decoder::new(File::open(&args[3]).unwrap());
         let (info, mut reader) = decoder.read_info().unwrap();
 
         // check if the file is capable of holding the hidden message
-        if info.buffer_size() > message_bin.len() {
+        if info.buffer_size() > encoding_payload.len() {
 
             // initialize mutable buffer vector
             let mut data = vec![0; info.buffer_size()];
@@ -114,9 +122,9 @@ fn main() {
             // read image from reader into buffer vector
             reader.next_frame(&mut data).unwrap();
 
-            // encode message binary data into target image data
+            // encode payload binary data into target image data
             let mut i = 0;
-            for bit in message_bin.iter() {
+            for bit in encoding_payload.iter() {
                 if *bit && data[i] % 2 == 0 {
                     data[i] += 1;
                 } else if !*bit && data[i] % 2 != 0 {
