@@ -81,10 +81,10 @@ fn main() {
         // args[4] -> where the results should be written (filename)
 
         // read contents of message file
-        let message_contents: Vec<u8> = read(&args[2]).unwrap();
+        let message_contents = read(&args[2]).unwrap();
 
         // convert contents of message to boolean vector
-        let message_bin: Vec<bool> = bin_vec_u8(message_contents);
+        let message_bin = bin_vec_u8(message_contents);
 
         // pull info and reader objects from new decoder object for image
         let decoder = Decoder::new(File::open(&args[3]).unwrap());
