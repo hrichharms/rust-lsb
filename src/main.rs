@@ -9,6 +9,21 @@ use png::Decoder;
 use png::Encoder;
 
 
+// converts an unsigned 16-bit integer into its binary form
+// represented by a boolena vector
+// EXAMPLE: 5 -> 0000 0000 0000 0101
+//          bin_u16(5u16) -> [false, false, ..., false, true, false, true]
+fn bin_u16(mut x: u16) -> Vec<bool> {
+    let mut output: Vec<bool> = Vec::new();
+    for _ in 0..16 {
+        output.push(x % 2 == 1);
+        x /= 2;
+    }
+    output.reverse();
+    return output;
+}
+
+
 // converts an unsigned 8-bit integer into its binary form
 // represented by a boolean vector
 // EXAMPLE: 5 -> 0000 0101
