@@ -9,7 +9,7 @@ To enode a file into an image:
 rust-lsb hidden_message.txt host_image.png encoded.png
 ```
 
-To extract an encoded file from an image
+To extract an encoded file from an image:
 
 ```console
 rust-lsb encoded.png hidden_message.txt
