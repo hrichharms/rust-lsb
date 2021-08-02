@@ -17,7 +17,7 @@ rust-lsb host_image.png hidden_message.txt
 
 ## Todo
 
-Implement variable bit usage i.e. use 2 least significant bits etc.
-Implement better logging
-Implement better error handling
-Implement support for jpeg image files
+- Implement variable bit usage i.e. use 2 least significant bits etc.
+- Implement better logging
+- Implement better error handling
+- Implement support for jpeg image files
