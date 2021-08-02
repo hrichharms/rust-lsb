@@ -4,6 +4,7 @@ use std::fs::File;
 use std::path::Path;
 use std::io::BufWriter;
 use std::string::String;
+use std::io::Write;
 
 use png::Decoder;
 use png::Encoder;
@@ -32,7 +33,7 @@ fn u16_bin(x: Vec<bool>) -> u16 {
     let mut output = 0u16;
     for i in 0..16 {
         if x[i] {
-            output += 2u8.pow(7 - i as u32);
+            output += 2u16.pow(15 - i as u32);
         }
     }
     return output;
@@ -105,7 +106,7 @@ fn u8_vec_bin(x: Vec<bool>) -> Vec<u8> {
 fn vec_u8_lsb(x: Vec<u8>) -> Vec<bool> {
     let mut output: Vec<bool> = Vec::new();
     for byte in x.iter() {
-        output.push(byte % 2);
+        output.push(byte % 2 == 1);
     }
     return output;
 }
@@ -198,6 +199,24 @@ fn main() {
 
         // read image from reader into buffer vector
         reader.next_frame(&mut data).unwrap();
+
+        // extract the 16-bit length header from the image data
+        // and calculate the length of the hidden message
+        let (header, remainder) = data.split_at(16);
+        let message_len = u16_bin(vec_u8_lsb(header.to_vec()));
+
+        // extract the binary representation of the hidden message from
+        // the remainder according to the calculated message length
+        let (message_bytes, _) = remainder.split_at(message_len as usize);
+        let message_bin = vec_u8_lsb(message_bytes.to_vec());
+
+        // convert the message binary to a u8 vector
+        let message = u8_vec_bin(message_bin);
+
+        // create output file and write message to it
+        let mut output_file = File::create(Path::new(&args[3])).unwrap();
+        output_file.write_all(&message).unwrap();
+
 
     }
 }
