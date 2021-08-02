@@ -24,6 +24,21 @@ fn bin_u16(mut x: u16) -> Vec<bool> {
 }
 
 
+// converts a 16-element boolean vector representing a binary number
+// to the unsigned 16-bit interger it represents
+// EXAMPLE: 0000 0000 0000 0101 -> 5
+//          u16_bin(vec![false, false, ..., false, true, false, true])
+fn u16_bin(x: Vec<bool>) -> u16 {
+    let mut output = 0u16;
+    for i in 0..16 {
+        if x[i] {
+            output += 2u8.pow(7 - i as u32);
+        }
+    }
+    return output;
+}
+
+
 // converts an unsigned 8-bit integer into its binary form
 // represented by a boolean vector
 // EXAMPLE: 5 -> 0000 0101
