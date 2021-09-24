@@ -20,4 +20,3 @@ rust-lsb encoded.png hidden_message.txt
 - Implement variable bit usage i.e. use 2 least significant bits etc.
 - Implement better logging
 - Implement better error handling
-- Implement support for jpeg image files
