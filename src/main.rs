@@ -64,25 +64,6 @@ fn u8_to_bin(x: u8) -> [bool; 8] {
     output
 }
 
-/// converts a vector of unsigned 8-bit intergers into their
-/// binary form represented by a boolean vector
-///
-/// # Example
-///
-/// ```no_run
-/// [5, 9] -> 0000 0101 0000 1001
-/// vec_u8_to_bin(vec![5u8, 9u8]) -> vec![false, false, false, false, false, true, false, true, false, false, false, false, true, false, false, true]
-/// ```
-fn vec_u8_to_bin(x: &[u8]) -> Vec<bool> {
-    let mut output: Vec<bool> = Vec::with_capacity(x.len() * 8);
-    for byte in x.iter() {
-        for bit in u8_to_bin(*byte).iter() {
-            output.push(*bit);
-        }
-    }
-    output
-}
-
 /// converts an 8-element boolean vector representing a binary number
 /// to the unsigned 8-bit integer it represents
 ///
@@ -97,6 +78,25 @@ fn bin_to_u8(x: &[bool]) -> u8 {
     for (idx, i) in x.iter().enumerate().take(8) {
         if *i {
             output += 2u8.pow(7 - idx as u32);
+        }
+    }
+    output
+}
+
+/// converts a vector of unsigned 8-bit intergers into their
+/// binary form represented by a boolean vector
+///
+/// # Example
+///
+/// ```no_run
+/// [5, 9] -> 0000 0101 0000 1001
+/// vec_u8_to_bin(vec![5u8, 9u8]) -> vec![false, false, false, false, false, true, false, true, false, false, false, false, true, false, false, true]
+/// ```
+fn vec_u8_to_bin(x: &[u8]) -> Vec<bool> {
+    let mut output: Vec<bool> = Vec::with_capacity(x.len() * 8);
+    for byte in x.iter() {
+        for bit in u8_to_bin(*byte).iter() {
+            output.push(*bit);
         }
     }
     output
@@ -136,7 +136,7 @@ fn main() {
     // pull command line arguments into strings vector
     let args: Vec<String> = args().collect();
 
-    if args[1].eq(&String::from("w")) {
+    if args[1].as_str().eq("w") {
         // args[2] -> hidden message to hide in host image
         // args[3] -> host image to hide message in
         // args[4] -> where the results should be written (filename)
@@ -198,7 +198,7 @@ fn main() {
             // file is too large
             println!("Hidden message too large for target image!");
         }
-    } else if args[1].eq(&String::from("r")) {
+    } else if args[1].as_str().eq("r") {
         // args[2] -> image with hidden message
         // args[3] -> where the extracted message should be written (filename)
 
