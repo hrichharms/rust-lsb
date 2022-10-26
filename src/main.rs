@@ -157,15 +157,14 @@ fn main() {
 
         // pull info and reader objects from new decoder object for image
         let decoder = Decoder::new(File::open(&args[3]).unwrap());
-        let (info, mut reader) = decoder.read_info().unwrap();
+        let mut reader = decoder.read_info().unwrap();
+        let mut buf = vec![0; reader.output_buffer_size()];
+        let info = reader.next_frame(&mut buf).unwrap();
 
         // check if the file is capable of holding the hidden message
         if info.buffer_size() > encoding_payload.len() {
             // initialize mutable buffer vector
-            let mut data = vec![0; info.buffer_size()];
-
-            // read image from reader into buffer vector
-            reader.next_frame(&mut data).unwrap();
+            let data = &mut buf[..info.buffer_size()];
 
             // encode payload binary data into target image data
             for (i, bit) in encoding_payload.iter().enumerate() {
@@ -193,7 +192,7 @@ fn main() {
             let mut writer = encoder.write_header().unwrap();
 
             // write data to output file
-            writer.write_image_data(&data).unwrap();
+            writer.write_image_data(data).unwrap();
         } else {
             // file is too large
             println!("Hidden message too large for target image!");
@@ -204,13 +203,12 @@ fn main() {
 
         // pull reader object from new decoder object for target image
         let decoder = Decoder::new(File::open(&args[2]).unwrap());
-        let (info, mut reader) = decoder.read_info().unwrap();
+        let mut reader = decoder.read_info().unwrap();
+        let mut buf = vec![0; reader.output_buffer_size()];
+        let info = reader.next_frame(&mut buf).unwrap();
 
         // initialize mutable buffer vector
-        let mut data = vec![0; info.buffer_size()];
-
-        // read image from reader into buffer vector
-        reader.next_frame(&mut data).unwrap();
+        let data = &buf[..info.buffer_size()];
 
         // extract the 16-bit length header from the image data
         // and calculate the length of the hidden message
